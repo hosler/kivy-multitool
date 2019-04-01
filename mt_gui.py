@@ -33,6 +33,7 @@ from collections import deque
 palette_q = deque(['Red', 'BlueGrey', 'Amber', 'DeepPurple', 'Blue', 'DeepOrange', 'Yellow', 'Cyan', 'Purple', 'Green',])
 tab_count = 0
 
+
 def loading(a_func):
     def wrapTheFunction(self, *args):
         Clock.schedule_once(self.loading_screen.show_loading)
@@ -72,11 +73,9 @@ class ListViewScreen(Screen):
             ic.secondary_text = hey[thing]["secondary_text"]
             self.ids.ml.add_widget(ic)
 
+
 class NavigationDrawerIconButtdon(NavigationDrawerIconButton):
     pass
-
-
-
 
 
 class NumPad(BoxLayout):
@@ -223,6 +222,7 @@ class RootWidget(BoxLayout):
     def change_screen(self, screen):
         if self.ids.tab_panel.previous_tab.name != "new":
             self.ids.tab_panel.previous_tab.ids.scr_mngr.current = screen
+
 
 class MultiToolApp(App):
     theme_cls = ThemeManager()
