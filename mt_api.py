@@ -22,7 +22,7 @@ def list1():
 
 @app.route('/getkvfile')
 def getkvfile():
-    with open("multitool_layout.kv", 'r') as f:
+    with open("mt_layout.kv", 'r') as f:
         file_content = f.read()
     return file_content
 
