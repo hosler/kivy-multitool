@@ -43,13 +43,8 @@ RootWidget:
             NavigationDrawerIconButton:
                 use_active: False
                 icon: 'checkbox-blank-circle'
-                text: "Server List"
-                on_release: app.root.change_screen("serverlist")
-            NavigationDrawerIconButton:
-                use_active: False
-                icon: 'checkbox-blank-circle'
-                text: "RC Window"
-                on_release: app.root.change_screen("rcwindow")
+                text: "Exit"
+                on_release: app.stop()
         BoxLayout:
             id: box_layout
             orientation: 'vertical'
