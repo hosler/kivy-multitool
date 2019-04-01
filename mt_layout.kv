@@ -16,9 +16,6 @@
 #:import OneLineAvatarIconListItem kivymd.list.OneLineAvatarIconListItem
 #:import MDTextField kivymd.textfields.MDTextField
 #:import MDSpinner kivymd.spinner.MDSpinner
-#:import MDCard kivymd.card.MDCard
-#:import MDSeparator kivymd.card.MDSeparator
-#:import MDDropdownMenu kivymd.menu.MDDropdownMenu
 #:import get_color_from_hex kivy.utils.get_color_from_hex
 #:import colors kivymd.color_definitions.colors
 #:import SmartTile kivymd.grid.SmartTile
@@ -33,7 +30,9 @@
 #:import MDBottomNavigation kivymd.tabs.MDBottomNavigation
 #:import MDBottomNavigationItem kivymd.tabs.MDBottomNavigationItem
 
-BoxLayout:
+RootWidget:
+
+<RootWidget>:
     tab_panel:
     NavigationLayout:
         id: nav_layout
@@ -108,31 +107,6 @@ BoxLayout:
                                     spacing: 10
                                     size_hint_x: .7
                                     size_hint_y: 1
-
-                    Screen:
-                        name: 'serverlist'
-                        ScrollView:
-                            pos_hint: {"center_x": .5, "center_y": .5}
-                            MDList:
-                                id: ml_serverlist
-                    Screen:
-                        name: 'rcwindow'
-                        BoxLayout:
-                            orientation: 'vertical'
-                            #padding: dp(48)
-                            spacing: 10
-                            ScrollView:
-                                id: sv_rcchat
-                                pos_hint: {"center_x": .5, "center_y": .5}
-                                MDList:
-                                    id: ml_rcchat
-                            MDTextField:
-                                id: chat_input
-                                size_hint_x: 1
-                                font_size: self.height * .4
-                                hint_text: "Chat"
-                                on_text_validate: root.send_chat(root.ids.chat_input.text)
-
         Screen:
             name: 'progress'
             MDCheckbox:
