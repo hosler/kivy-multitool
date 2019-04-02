@@ -120,7 +120,7 @@ class NumPad(BoxLayout):
         if value == '':
             self.display_text = '0'
             return
-        if int(value) > self.maximum_value and self.maximum_value != None:
+        if self.maximum_value != None and int(value) > self.maximum_value:
             self.display_text = str(self.maximum_value)
             return
         self.display_value = int(value)

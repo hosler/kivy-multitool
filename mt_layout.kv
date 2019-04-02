@@ -122,14 +122,14 @@ RootWidget:
     size: root.size
     pos: root.pos
     orientation: 'vertical'
-    padding: 10
+    padding: 0
     MDTextField:
         hint_text: "Number"
-        size_hint_y: .5
+        size_hint_y: .1
         text: root.display_text + root.units if root.units != None else root.display_text
         #theme: ('blue', 'variant_2')
         #halign: 'right'
-        font_size: self.height * .75
+        font_size: self.height * .25
     GridLayout:
         cols:3
         size_hint_y: .8
