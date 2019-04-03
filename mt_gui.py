@@ -47,7 +47,9 @@ class ListViewScreen(Screen):
     def __init__(self, loading_screen=None, **kwargs):
         super(ListViewScreen, self).__init__(**kwargs)
         self.loading_screen = loading_screen
+        self.app = App.get_running_app()
         threading.Thread(target=self.fetch_screen).start()
+
 
     @loading
     def fetch_screen(self):
@@ -55,7 +57,7 @@ class ListViewScreen(Screen):
         retries = 10
         while True:
             try:
-                r = requests.get('http://127.0.0.1:5000/'+self.name)
+                r = requests.get(self.app.host+'/'+self.name)
             except Exception as e:
                 time.sleep(1)
                 count+=1
@@ -90,6 +92,7 @@ class NumPad(BoxLayout):
     def __init__(self, p=None, **kwargs):
         super(NumPad, self).__init__(**kwargs)
         self.p = p
+        self.app = App.get_running_app()
 
     def check_minimum_value(self):
         if self.minimum_value != None:
@@ -98,7 +101,7 @@ class NumPad(BoxLayout):
 
     def button_callback(self, button_str):
         if button_str == "Find":
-            self.app = App.get_running_app()
+
             self.p.process_button_click(self.display_text)
 
         if button_str in [str(x) for x in range(10)]:
@@ -164,9 +167,9 @@ class TabWorker(MDTab):
         while True:
             try:
                 if self.name == "new":
-                    r = requests.get('http://127.0.0.1:5000/getnav')
+                    r = requests.get(self.app.host+'/getnav')
                 else:
-                    r = requests.get('http://127.0.0.1:5000/getworknav')
+                    r = requests.get(self.app.host+'/getworknav')
             except Exception as e:
                 time.sleep(1)
                 count+=1
@@ -227,7 +230,7 @@ class RootWidget(BoxLayout):
 class MultiToolApp(App):
     theme_cls = ThemeManager()
     title = "MultiTool"
-
+    host = "http://10.0.0.15:5000"
     def on_stop(self):
         # The Kivy event loop is about to stop, set a stop signal;
         # otherwise the app window will close, but the Python process will
@@ -239,12 +242,19 @@ class MultiToolApp(App):
         retries = 10
         while True:
             try:
-                r = requests.get('http://127.0.0.1:5000/getkvfile')
-            except Exception:
-                time.sleep(1)
-                count += 1
-                if count > retries:
-                    raise
+                r = requests.get(self.host+'/getkvfile')
+                print("made it")
+            except:
+                try:
+                    r = requests.get('http://127.0.0.1:5000/getkvfile')
+                    print("didnt make it")
+                except Exception:
+                    time.sleep(1)
+                    count += 1
+                    if count > retries:
+                        raise
+                else:
+                    break
             else:
                 break
         self.root = Builder.load_string(r.text)

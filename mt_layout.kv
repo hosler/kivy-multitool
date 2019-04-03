@@ -90,17 +90,18 @@ RootWidget:
                             FloatLayout:
                                 BoxLayout:
                                     id: box1
+                                    size: root.size
                                     canvas.before:
                                         Color:
-                                            rgba: 0, 1, 0, 0
+                                            rgba: 1, 0, 0, 0
                                         Rectangle:
                                             pos: self.pos
                                             size: self.size
                                     orientation:
                                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                                    padding: dp(48)
+                                    #padding: dp(48)
                                     spacing: 10
-                                    size_hint_x: .7
+                                    #size_hint_x: .9
                                     size_hint_y: 1
         Screen:
             name: 'progress'
@@ -122,14 +123,14 @@ RootWidget:
     size: root.size
     pos: root.pos
     orientation: 'vertical'
-    padding: 0
+    padding: 10
     MDTextField:
         hint_text: "Number"
         size_hint_y: .1
         text: root.display_text + root.units if root.units != None else root.display_text
         #theme: ('blue', 'variant_2')
         #halign: 'right'
-        font_size: self.height * .25
+        font_size: self.height * .5
     GridLayout:
         cols:3
         size_hint_y: .8
