@@ -18,9 +18,11 @@ from kivymd.theming import ThemeManager
 from kivymd.time_picker import MDTimePicker
 from kivymd.tabs import MDTab
 from kivy.clock import Clock, mainthread
-from kivymd.list import TwoLineListItem, OneLineListItem, ThreeLineListItem
+from kivymd.list import TwoLineListItem, OneLineListItem, ThreeLineListItem, MDList
+from kivymd.button import MDRaisedButton
 from kivymd.navigationdrawer import NavigationDrawerIconButton
 from kivy.properties import (StringProperty, NumericProperty, ObjectProperty)
+from kivy.factory import Factory
 
 
 import threading
@@ -43,12 +45,14 @@ def loading(a_func):
     return wrapTheFunction
 
 
-class ListViewScreen(Screen):
+class ScreenWorker(Screen):
     def __init__(self, loading_screen=None, **kwargs):
-        super(ListViewScreen, self).__init__(**kwargs)
+        super(ScreenWorker, self).__init__(**kwargs)
         self.loading_screen = loading_screen
         self.app = App.get_running_app()
         threading.Thread(target=self.fetch_screen).start()
+        self.my_widgets = {}
+        self.widget_count = 0
 
 
     @loading
@@ -66,15 +70,28 @@ class ListViewScreen(Screen):
             else:
                 break
         hey = r.json()
-        Clock.schedule_once(partial(self.paint_screen, hey))
+        Clock.schedule_once(partial(self.paint_screen, self.ids.scroll_worker, hey))
 
-    def paint_screen(self, hey, *args):
-        for thing in hey:
-            ic = TwoLineListItem()
-            ic.text = hey[thing]["text"]
-            ic.secondary_text = hey[thing]["secondary_text"]
-            self.ids.ml.add_widget(ic)
+    def paint_screen(self, root, data, *args):
+        for widget in data:
+            self.widget_count += 1
+            widgets = widget.pop("widgets", None)
+            release = widget.pop("on_release", None)
+            id = widget.pop("id", str(self.widget_count))
+            foo = Factory.get(widget.pop('type'))(**widget)
+            foo.id = id
+            if release is not None:
+                foo.bind(on_release=partial(self.callback, **release))
+            self.my_widgets[foo.id] = foo
+            root.add_widget(foo)
+            if widgets is not None:
+                self.paint_screen(foo, widgets)
 
+
+    def callback(self, *args, **kwargs):
+        r = requests.get(self.app.host + '/' + kwargs["api"])
+        hey = r.json()
+        self.my_widgets[kwargs["display"]].text = hey
 
 class NavigationDrawerIconButtdon(NavigationDrawerIconButton):
     pass
@@ -146,7 +163,7 @@ class TabWorker(MDTab):
         if x in self.screens:
             self.ids.scr_mngr.current = x
         else:
-            foo = ListViewScreen(loading_screen=self, name=x)
+            foo = ScreenWorker(loading_screen=self, name=x)
             self.screens[x] = foo
             self.ids.scr_mngr.add_widget(foo)
             self.ids.scr_mngr.current = x
@@ -243,11 +260,9 @@ class MultiToolApp(App):
         while True:
             try:
                 r = requests.get(self.host+'/getkvfile')
-                print("made it")
             except:
                 try:
                     r = requests.get('http://127.0.0.1:5000/getkvfile')
-                    print("didnt make it")
                 except Exception:
                     time.sleep(1)
                     count += 1

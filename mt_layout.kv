@@ -63,11 +63,10 @@ RootWidget:
                     name: 'new'
                     text: 'New (+)'
 
-<ListViewScreen>:
+<ScreenWorker>:
     ScrollView:
+        id: scroll_worker
         pos_hint: {"center_x": .5, "center_y": .5}
-        MDList:
-            id: ml
 
 <TabWorker>
     ScreenManager:
