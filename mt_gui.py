@@ -77,9 +77,12 @@ class ScreenWorker(Screen):
             self.widget_count += 1
             widgets = widget.pop("widgets", None)
             release = widget.pop("on_release", None)
+            size = widget.pop("size", None)
             id = widget.pop("id", str(self.widget_count))
             foo = Factory.get(widget.pop('type'))(**widget)
             foo.id = id
+            if size is not None and size == "root.size":
+                foo.size = root.size
             if release is not None:
                 foo.bind(on_release=partial(self.callback, **release))
             self.my_widgets[foo.id] = foo
@@ -89,9 +92,17 @@ class ScreenWorker(Screen):
 
 
     def callback(self, *args, **kwargs):
-        r = requests.get(self.app.host + '/' + kwargs["api"])
+        params = {}
+        for name, widget in self.my_widgets.items():
+            try:
+                params[name] = widget.text
+            except Exception:
+                pass
+
+        r = requests.get(self.app.host + '/' + kwargs["api"], params=params)
         hey = r.json()
-        self.my_widgets[kwargs["display"]].text = hey
+        for id in hey["text"]:
+            self.my_widgets[id].text = hey["text"][id]
 
 class NavigationDrawerIconButtdon(NavigationDrawerIconButton):
     pass

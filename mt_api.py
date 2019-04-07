@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -25,42 +25,50 @@ def list1():
 
 @app.route('/list2')
 def list2():
-    d = [
-        {
+    d = [{
         "type": "FloatLayout",
-        "widgets": [
-            {
-                "type": "BoxLayout",
-                #"size": "root.size",
-                "orientation": "vertical",
-                "widgets": [
-                            {
-                                "type": "MDLabel",
-                                "text": "hoora",
-                                "id": "l1"
-                            },
-                            {
-                                "type": "MDRaisedButton",
-                                "text": "value1",
-                            },
-                            {
-                                "type": "MDRaisedButton",
-                                "text": "value2",
-                                "on_release": {
-                                    "api": "action1",
-                                    "display": "l1"
-                                }
+        "widgets": [{
+            "type": "BoxLayout",
+            "size": "root.size",
+            "orientation": "vertical",
+            "widgets": [{
+                    "type": "AnchorLayout",
+                    "anchor_x": 'center',
+                    "anchor_y": 'top',
+                    "widgets": [{
+                            "type": "MDLabel",
+                            "text": "[color=ff3333]Hello[/color][color=3333ff]World[/color]",
+                            "id": "l1",
+                            "size_hint_y": ".25",
+                            "halign": "center",
+                            "markup": True,
+                            #"pos_hint": {'center_x': 0.5, 'center_y': 0.5}
+                        }]
+                        },
+                {
+                    "type": "AnchorLayout",
+                    "anchor_x": 'center',
+                    "anchor_y": 'top',
+                    "widgets": [{
+                            "type": "MDRaisedButton",
+                            "text": "value2",
+                            #"pos_hint": {'center_x': 0.5, 'center_y': 0.5},
+                            "on_release": {
+                                "api": "action1",
                             }
-                        ]
-            }
-            ]
-        }
-        ]
+                        }]
+                }]
+                    }]
+        }]
     return jsonify(d)
 
 @app.route('/action1')
 def action1():
-    d = "hi"
+    d = {
+        "text": {
+            "l1": "[color=ff3333][size=24]Button Clicked![/size][/color]"
+        }
+    }
     return jsonify(d)
 
 @app.route('/getkvfile')
