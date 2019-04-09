@@ -21,7 +21,7 @@ from kivy.clock import Clock, mainthread
 from kivymd.list import TwoLineListItem, OneLineListItem, ThreeLineListItem, MDList
 from kivymd.button import MDRaisedButton
 from kivymd.navigationdrawer import NavigationDrawerIconButton
-from kivy.properties import (StringProperty, NumericProperty, ObjectProperty)
+from kivy.properties import (StringProperty, NumericProperty, ObjectProperty, ListProperty)
 from kivy.factory import Factory
 
 
@@ -70,6 +70,7 @@ class ScreenWorker(Screen):
             else:
                 break
         hey = r.json()
+        time.sleep(3)
         Clock.schedule_once(partial(self.paint_screen, self.ids.scroll_worker, hey))
 
     def paint_screen(self, root, data, *args):
@@ -78,9 +79,18 @@ class ScreenWorker(Screen):
             widgets = widget.pop("widgets", None)
             release = widget.pop("on_release", None)
             size = widget.pop("size", None)
+            left_action_items = widget.pop("left_action_items", None)
             id = widget.pop("id", str(self.widget_count))
             foo = Factory.get(widget.pop('type'))(**widget)
             foo.id = id
+            if left_action_items is not None:
+                items = ListProperty()
+                for item in left_action_items:
+                    if item[1] == "lambda x: None":
+                        items = [[item[0], lambda x: None]]
+                    else:
+                        items = [[item[0], item[1]]]
+                foo.left_action_items = items
             if size is not None and size == "root.size":
                 foo.size = root.size
             if release is not None:

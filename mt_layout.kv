@@ -29,6 +29,7 @@
 #:import MDThemePicker kivymd.theme_picker.MDThemePicker
 #:import MDBottomNavigation kivymd.tabs.MDBottomNavigation
 #:import MDBottomNavigationItem kivymd.tabs.MDBottomNavigationItem
+#:import NoTransition kivy.uix.screenmanager.NoTransition
 
 RootWidget:
 
@@ -71,6 +72,8 @@ RootWidget:
 <TabWorker>
     ScreenManager:
         id: scr_mngr_mode
+        transition: NoTransition()
+        duration: 5
         Screen:
             name: 'work'
             NavigationLayout:
@@ -129,7 +132,7 @@ RootWidget:
         text: root.display_text + root.units if root.units != None else root.display_text
         #theme: ('blue', 'variant_2')
         #halign: 'right'
-        font_size: self.height * .5
+        #font_size: self.height * .5
     GridLayout:
         cols:3
         size_hint_y: .8
