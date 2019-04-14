@@ -70,7 +70,7 @@ class ScreenWorker(Screen):
             else:
                 break
         hey = r.json()
-        time.sleep(3)
+        time.sleep(1)
         Clock.schedule_once(partial(self.paint_screen, self.ids.scroll_worker, hey))
 
     def paint_screen(self, root, data, *args):
