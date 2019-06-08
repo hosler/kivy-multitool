@@ -39,8 +39,8 @@ RootWidget:
         id: nav_layout
         MDNavigationDrawer:
             id: nav_drawer
-            NavigationDrawerToolbar:
-                title: "Navigation Drawer"
+            use_logo: 'label'
+            drawer_title: 'Navigation title'
             NavigationDrawerIconButton:
                 use_active: False
                 icon: 'checkbox-blank-circle'
@@ -64,10 +64,42 @@ RootWidget:
                     name: 'new'
                     text: 'New (+)'
 
+<AnchorLayoutCenter@AnchorLayout>
+    anchor_x: 'center'
+    anchor_y: 'top'
+
+<cards_grid@GridLayout>
+    id: grid_card
+    cols: 1
+    spacing: dp(5)
+    padding: dp(5)
+    size_hint_y: None
+    height: self.minimum_height
+
 <ScreenWorker>:
-    ScrollView:
-        id: scroll_worker
-        pos_hint: {"center_x": .5, "center_y": .5}
+    ScreenManager:
+        id: scr_mngr_mode
+        transition: NoTransition()
+        duration: 5
+        Screen:
+            name: 'work'
+            ScrollView:
+                id: scroll_worker
+                pos_hint: {"center_x": .5, "center_y": .5}
+        Screen:
+            name: 'progress'
+            MDCheckbox:
+                id:            chkbox
+                size_hint:    None, None
+                size:        dp(48), dp(48)
+                pos_hint:    {'center_x': 0.5, 'center_y': 0.4}
+                active: True
+            MDSpinner:
+                id: spinner
+                size_hint: None, None
+                size: dp(46), dp(46)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                active: True if chkbox.active else False
 
 <TabWorker>
     ScreenManager:

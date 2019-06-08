@@ -27,14 +27,10 @@ def list1():
 def list2():
     d = [
         {
-            "type": "BoxLayout",
-            "size": "root.size",
-            "orientation": "vertical",
+            "type": "cards_grid",
             "widgets": [
                 {
-                    "type": "AnchorLayout",
-                    "anchor_x": 'center',
-                    "anchor_y": 'top',
+                    "type": "MDCardPost",
                     "widgets": [
                         {
                             "type": "MDLabel",
@@ -47,9 +43,7 @@ def list2():
                     ]
                 },
                 {
-                    "type": "AnchorLayout",
-                    "anchor_x": 'center',
-                    "anchor_y": 'top',
+                    "type": "MDCardPost",
                     "widgets": [
                         {
                             "type": "MDRaisedButton",

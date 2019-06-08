@@ -48,11 +48,17 @@ def loading(a_func):
 class ScreenWorker(Screen):
     def __init__(self, loading_screen=None, **kwargs):
         super(ScreenWorker, self).__init__(**kwargs)
-        self.loading_screen = loading_screen
+        self.loading_screen = self
         self.app = App.get_running_app()
         threading.Thread(target=self.fetch_screen).start()
         self.my_widgets = {}
         self.widget_count = 0
+
+    def show_loading(self, *args):
+        self.ids.scr_mngr_mode.current = "progress"
+
+    def hide_loading(self, *args):
+        self.ids.scr_mngr_mode.current = "work"
 
 
     @loading
